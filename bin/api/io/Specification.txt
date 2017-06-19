@@ -1,0 +1,57 @@
+1, 字节输入流类
+                        |- FileInputStream 原始流
+                        |
+                        |- ObjectInputStream
+                        |
+                        |- PipedInputStream 原始流             
+                        |                                |- DataInputStream
+                        |- SequenceInputStream           |
+        InputStream <---|                                |- PushBackInputStream
+                        |- FilterInputStream <-----------|
+                        |                                |- BufferedInputStream
+                        |- StringBufferedInputStream 原始流    |
+                        |                                |- LineNumberInputStream
+                        |- ByteArrayInputStream 原始流
+                        
+2, 字节输出流类
+
+                        |- FileOutputStream            |- ObjectOutputStream
+                        |  _ _ _ _ _ _ _ _ _ _ _       |
+                        |- ObjectOutputStream          |- DataOutputStream
+                        |  ---------------------       |
+       OutputStream <---|- FilterOutputStream   <------|- BufferedOutputStream
+                        |                              |
+                        |- PipedOutputStream           |- PrintStream
+                        |							   
+                        |- ByteArrayOutputStream	   
+                       
+3, 字符输入流类
+
+                      |- BufferedReader    <---------- LineNumberReader
+                      |
+                      |- CharArrayReader
+                      |
+          Reader <----|- StringReader
+                      |
+                      |- InputStreamReader  <--------- FileReader
+                      |
+                      |- PipedReader
+                      |
+                      |- FilterReader       <--------- PushbackReader
+                      
+4, 字符输出流类
+
+                     |- BufferedWriter
+                     |
+                     |- CharArrayWriter
+                     |
+          Writer <---|- StringWriter
+                     |
+                     |- OutputStreamWriter  <---- FileWriter
+                     |
+                     |- PrintWriter
+                     |
+                     |- PipedWriter
+                     |
+                     |- FilterWriter
+                     

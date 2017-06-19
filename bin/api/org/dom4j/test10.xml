@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ROOT>
+   <INFO>
+      <DESC>千惠集-账单支付-历史电子账单显示格式-账单详情-信用卡账单</DESC>
+      <VERSION>0.0.1</VERSION>
+   </INFO>
+   <ROW  name="账单日">
+      <PARAM>
+          <PARAM-VALUE name="etf-name">BILL_DT</PARAM-VALUE>
+      </PARAM>
+   </ROW>
+   <ROW  name="到期还款日">
+      <PARAM>
+          <PARAM-VALUE name="etf-name">BILL_EXP_DT</PARAM-VALUE>
+      </PARAM>
+   </ROW>
+   <ROW  name="上期账单金额">
+      <PARAM>
+          <PARAM-VALUE name="etf-name">LAST_BILL_AMT</PARAM-VALUE>
+      </PARAM>
+   </ROW>
+   <ROW  name="上期还款金额">
+      <PARAM>
+          <PARAM-VALUE name="etf-name">LAST_PAY_AMT</PARAM-VALUE>
+      </PARAM>
+   </ROW>
+   <ROW  name="本期账单金额">
+      <PARAM>
+          <PARAM-VALUE name="etf-name">BILL_AMT</PARAM-VALUE>
+      </PARAM>
+   </ROW>
+   <ROW  name="本期调整金额">
+      <PARAM>
+          <PARAM-VALUE name="etf-name">ADJUST_AMT</PARAM-VALUE>
+      </PARAM>
+   </ROW>
+   <ROW name="循环利息">
+      <PARAM>
+          <PARAM-VALUE name="etf-name">CYC_INTEREST</PARAM-VALUE>
+      </PARAM>
+   </ROW>
+   <ROW name="本期应还金额">
+      <PARAM>
+          <PARAM-VALUE name="etf-name">BILL_AMT</PARAM-VALUE>
+      </PARAM>
+   </ROW>
+   <ROW name="最低还款金额">
+      <PARAM>
+          <PARAM-VALUE name="etf-name">MIN_PAY_AMT</PARAM-VALUE>
+      </PARAM>
+   </ROW>
+</ROOT>

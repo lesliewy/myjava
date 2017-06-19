@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ROOT>
+   <INFO>
+      <DESC>千惠集-账单支付-电子账单显示格式-一级菜单</DESC>
+      <VERSION>0.0.1</VERSION>
+   </INFO>
+   <ROW>
+      <PARAM name="账单类型名称"> 
+         <ETF-NAME>BILL_NM</ETF-NAME>
+      </PARAM>
+      <PARAM name="账单条数">
+         <ETF-NAME>BILL_NUM</ETF-NAME>
+         <DISPLAY>共BILL_NUM条账单信息</DISPLAY>
+      </PARAM>
+      <PARAM name="LOGO">
+         <LOGO-URL>logo url</LOGO-URL>
+      </PARAM>
+   </ROW>
+</ROOT>

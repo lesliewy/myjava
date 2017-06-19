@@ -1,0 +1,4 @@
+2013-08-11 23:16:14,477 [main] ERROR examples.java.log.logback.TestA - TestA-error
+2013-08-11 23:16:14,487 [main] ERROR examples.java.log.logback.TestB - TestB-error
+2013-08-11 23:16:14,487 [main] ERROR examples.java.log.logback.TestC - TestC-error
+2013-08-11 23:16:14,487 [main] ERROR examples.java.log.logback.TestD - TestD-error

@@ -1,0 +1,25 @@
+2013-08-11 13:08:49,620 INFO [examples.java.log.jcl.LogJCLTest.main(24)] - <info...>
+2013-08-11 13:08:49,631 ERROR [examples.java.log.jcl.LogJCLTest.main(26)] - <error...>
+2013-08-11 13:11:18,095 DEBUG [examples.java.log.log4j.LogTest.main(19)] - <debuging>
+2013-08-11 13:11:18,098 INFO [examples.java.log.log4j.LogTest.main(21)] - <info...>
+2013-08-11 13:11:18,098 ERROR [examples.java.log.log4j.LogTest.main(23)] - <error...>
+2013-08-11 13:12:20,502 DEBUG [examples.java.log.log4j.LogTest.main(19)] - <debuging>
+2013-08-11 13:12:20,506 INFO [examples.java.log.log4j.LogTest.main(21)] - <info...>
+2013-08-11 13:12:20,506 ERROR [examples.java.log.log4j.LogTest.main(23)] - <error...>
+2013-08-11 13:12:54,052 DEBUG [examples.java.log.log4j.LogTest.main(19)] - <debuging>
+2013-08-11 13:12:54,055 INFO [examples.java.log.log4j.LogTest.main(21)] - <info...>
+2013-08-11 13:12:54,055 ERROR [examples.java.log.log4j.LogTest.main(23)] - <error...>
+2013-08-11 13:13:31,940 DEBUG [examples.java.log.log4j.LogTest.main(19)] - <debuging>
+2013-08-11 13:13:31,944 INFO [examples.java.log.log4j.LogTest.main(21)] - <info...>
+2013-08-11 13:13:31,944 ERROR [examples.java.log.log4j.LogTest.main(23)] - <error...>
+2013-08-11 13:24:11,880 INFO [examples.java.log.slf4j.SLF4JTest.main(19)] - <info ....>
+2013-08-11 13:24:11,887 ERROR [examples.java.log.slf4j.SLF4JTest.main(23)] - <error ...>
+2013-08-11 13:34:19,657 INFO [examples.java.log.jcl.LogJCLTest.main(33)] - <info...>
+2013-08-11 13:34:19,668 ERROR [examples.java.log.jcl.LogJCLTest.main(35)] - <error...>
+2013-08-11 13:34:44,298 INFO [examples.java.log.jcl.LogJCLTest.main(33)] - <info...>
+2013-08-11 13:34:44,302 ERROR [examples.java.log.jcl.LogJCLTest.main(35)] - <error...>
+2013-08-11 13:36:15,284 INFO [examples.java.log.jcl.LogJCLTest.main(33)] - <info...>
+2013-08-11 13:36:15,288 ERROR [examples.java.log.jcl.LogJCLTest.main(35)] - <error...>
+2013-08-11 22:56:51,687 INFO [examples.java.log.logback.TestA.<init>(17)] - <TestA-info>
+2013-08-11 22:56:51,693 WARN [examples.java.log.logback.TestA.<init>(18)] - <TestA-warn>
+2013-08-11 22:56:51,693 ERROR [examples.java.log.logback.TestA.<init>(19)] - <TestA-error>

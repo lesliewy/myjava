@@ -1,0 +1,2 @@
+2013-08-11 23:16:14,487 [main] WARN  examples.java.log.logback.TestC - TestC-warn
+2013-08-11 23:16:14,487 [main] ERROR examples.java.log.logback.TestC - TestC-error

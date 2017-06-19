@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ROOT>
+   <INFO>
+      <DESC>千惠集-账单支付-历史电子账单显示格式-账单详情-电力账单</DESC>
+      <VERSION>0.0.1</VERSION>
+   </INFO>
+   <ROW name="抄表日">
+      <PARAM>
+          <PARAM-VALUE name="etf-name">CHECK_DT</PARAM-VALUE>
+      </PARAM>
+   </ROW>
+   <ROW name="到期缴费日">
+      <PARAM>
+          <PARAM-VALUE name="etf-name">BILL_EXP_DT</PARAM-VALUE>
+      </PARAM>
+   </ROW>
+   <ROW name="本期抄表数">
+      <PARAM>
+          <PARAM-VALUE name="etf-name">CHECK_VAL</PARAM-VALUE>
+      </PARAM>
+   </ROW>
+   <ROW name="本期用电量">
+      <PARAM>
+          <PARAM-VALUE name="etf-name">USE_VAL</PARAM-VALUE>
+      </PARAM>
+   </ROW>
+   <ROW  name="本期缴费金额">
+      <PARAM>
+          <PARAM-VALUE name="etf-name">BILL_AMT</PARAM-VALUE>
+      </PARAM>
+   </ROW>
+</ROOT>

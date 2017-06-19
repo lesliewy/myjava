@@ -1,0 +1,9 @@
+2013-08-11 23:16:14,477 [main] INFO  examples.java.log.logback.TestA - TestA-info
+2013-08-11 23:16:14,477 [main] WARN  examples.java.log.logback.TestA - TestA-warn
+2013-08-11 23:16:14,477 [main] ERROR examples.java.log.logback.TestA - TestA-error
+2013-08-11 23:16:14,477 [main] INFO  examples.java.log.logback.TestB - TestB-info
+2013-08-11 23:16:14,487 [main] WARN  examples.java.log.logback.TestB - TestB-warn
+2013-08-11 23:16:14,487 [main] ERROR examples.java.log.logback.TestB - TestB-error
+2013-08-11 23:16:14,487 [main] WARN  examples.java.log.logback.TestC - TestC-warn
+2013-08-11 23:16:14,487 [main] ERROR examples.java.log.logback.TestC - TestC-error
+2013-08-11 23:16:14,487 [main] ERROR examples.java.log.logback.TestD - TestD-error

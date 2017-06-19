@@ -1,0 +1,31 @@
+1, classpath
+   a, javac -verbose HelloServlet.java   输出类似如下：
+      [源文件的搜索路径： [., C:\Program Files\Java\jdk1.5.0_04\lib, C:\Program Files\
+		Java\jdk1.5.0_04\lib\dt.jar, C:\Program Files\Java\jdk1.5.0_04\lib\tools.jar, C:
+		\apache-tomcat-6.0.24\lib\servlet-api.jar]]
+		[类文件的搜索路径： [C:\Program Files\Java\jdk1.5.0_04\jre\lib\rt.jar, C:\Progra
+		m Files\Java\jdk1.5.0_04\jre\lib\jsse.jar, C:\Program Files\Java\jdk1.5.0_04\jre
+		\lib\jce.jar, C:\Program Files\Java\jdk1.5.0_04\jre\lib\charsets.jar, C:\Program
+		 Files\Java\jdk1.5.0_04\jre\lib\ext\dnsns.jar, C:\Program Files\Java\jdk1.5.0_04
+		\jre\lib\ext\localedata.jar, C:\Program Files\Java\jdk1.5.0_04\jre\lib\ext\sunjc
+		e_provider.jar, C:\Program Files\Java\jdk1.5.0_04\jre\lib\ext\sunpkcs11.jar, .,
+		C:\Program Files\Java\jdk1.5.0_04\lib, C:\Program Files\Java\jdk1.5.0_04\lib\dt.
+		jar, C:\Program Files\Java\jdk1.5.0_04\lib\tools.jar, C:\apache-tomcat-6.0.24\li
+		b\servlet-api.jar]]
+	         其中源文件的搜索路径即 环境变量  CLASSPATH的值，如果有不同，说明缺少的那个设置有问题.
+	   
+	          系统变量和用户变量是有区别的， 如果CLASSPATH是系统变量，则不会去查找用户环境变量，所以，假如有
+	    %CATALINA_HOME%\lib\servlet-api.jar; 是无效的,需要将CATALINA_HOME设置为系统变量.
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+* 说明：
+   * interface abstract class :  concept.Interface
+   * static 代码块、方法                  :  concept.Static
+   * 内部类                                                    :  concept.Outer
+   

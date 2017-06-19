@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<hotspot_log version='160 1' process='4320' time_ms='1377321524678'>
+<vm_version>
+<name>
+Java HotSpot(TM) Client VM
+</name>
+<release>
+20.2-b03-fastdebug
+</release>
+<info>
+Java HotSpot(TM) Client VM (20.2-b03-fastdebug) for windows-x86 JRE (1.6.0_27-ea-fastdebug-b03), built on May 27 2011 03:00:13 by &quot;java_re&quot; with MS VC++ 7.1 (VS2003)
+</info>
+</vm_version>
+<vm_arguments>
+<args>
+-agentlib:jdwp=transport=dt_socket,suspend=y,address=localhost:50850 -Dfile.encoding=UTF-8 
+</args>
+<command>
+api.lang.String.AboutString
+</command>
+<launcher>
+SUN_STANDARD
+</launcher>
+<properties>
+java.vm.specification.name=Java Virtual Machine Specification
+java.vm.version=20.2-b03-fastdebug
+java.vm.name=Java HotSpot(TM) Client VM
+java.vm.info=mixed mode, sharing
+java.ext.dirs=C:\MyInstall\Java\Oracle_JDK\jdk1.6.0_27_debug\jdk1.6.0_27\fastdebug\jre\lib\ext;C:\windows\Sun\Java\lib\ext
+java.endorsed.dirs=C:\MyInstall\Java\Oracle_JDK\jdk1.6.0_27_debug\jdk1.6.0_27\fastdebug\jre\lib\endorsed
+sun.boot.library.path=C:\MyInstall\Java\Oracle_JDK\jdk1.6.0_27_debug\jdk1.6.0_27\fastdebug\jre\bin
+Java HotSpot(TM) Client VM warning: increase O_BUFLEN in ostream.hpp -- output truncated
+java.library.path=C:\MyInstall\Java\Oracle_JDK\jdk1.6.0_27_debug\jdk1.6.0_27\fastdebug\bin;C:\windows\Sun\Java\bin;C:\windows\system32;C:\windows;C:\MyInstall\Java\Oracle_JDK\jdk1.6.0_27_debug\jdk1.6.0_27\fastdebug\jre\bin;c:/Program Files (x86)/MyEclipse/Common/binary/com.sun.java.jdk.win32.x86_1.6.0.013/jre/bin/client;c:/Program Files (x86)/MyEclipse/Common/binary/com.sun.java.jdk.win32.x86_1.6.0.013/jre/bin;C:\Program Files (x86)\Windows Resource Kits\Tools\;c:\myinstall\oracle\product\11.2.0\dbhome_1\bin;s:\springtoolsuite\jdk\bin;s:\springtoolsuite\apache-maven-3.0.4\bin;c:\program files (x86)\common files\netsarang;c:\windows\system32;c:\windows;c:\windows\system32\wbem;c:\windows\system32\windowspowershell\v1.0\;c:\program files\ibm\infoprint select;c:\program files\thinkpad\bluetooth software\;c:\program files\thinkpad\bluetooth software\syswow64;c:\program files\broadcom\whl\;c:\program files\broadcom\whl\syswow64;c:\program files\broadcom\whl\syswow64\;c:\program files\broadcom\whl\syswow64\syswow64;c:\program files\intel\wifi\bin\;c:\program files\common files\intel\wirelesscommon\;c:\program files (x86)\lenovo\access connections\;c:\program files (x86)\ibm\personal communications\;c:\program files (x86)\ibm\trace facility\;c:\program files (x86)\rational\common;c:\program files (x86)\tortoisesvn\bin;c:\notes;c:\myinstall\java\oracle_jdk\jdk1.6.0_20\bin\;.;c:\users\ibm_admin\shortcut\;c:\users\ibm_admin\shortcut\ibm\;c:\myinstall\apache-maven-3.0.4\bin\;c:\program files\ibm\gsk8\lib64;c:\program files (x86)\ibm\gsk8\lib;C:\MYINST~1\SQLLIB\BIN;C:\MYINST~1\SQLLIB\FUNCTION;C:\MYINST~1\SQLLIB\SAMPLES\REPL;C:\Program Files (x86)\JProbe 8.1\bin;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Users\IBM_ADMIN\Shortcut\;c:\Users\IBM_ADMIN\Shortcut\IBM\;s:\springToolSuite\jdkbin\;c:\windows\system32;c:\Leslie\Software\AS Application Software\Word Process\Vim\vim73;c:\Leslie\Software\Programming Software\Apache\Subversion\Ap
+java.home=C:\MyInstall\Java\Oracle_JDK\jdk1.6.0_27_debug\jdk1.6.0_27\fastdebug\jre
+java.class.path=C:\IBM\my\java\MyJava\bin;C:\Program Files (x86)\MyEclipse\Common\plugins\org.junit4_4.5.0.v20090824\junit.jar;C:\Program Files (x86)\MyEclipse\Common\plugins\org.hamcrest.core_1.1.0.v20090501071000.jar;C:\IBM\my\Myjar\self\Json\json-lib-2.2.2-jdk13.jar;C:\IBM\my\Myjar\self\Json\commons-lang-2.3.jar;C:\IBM\my\Myjar\self\Json\commons-logging-1.1.jar;C:\IBM\my\Myjar\self\Json\ezmorph-1.0.5.jar;C:\IBM\my\Myjar\self\Json\commons-collections-3.2.1.jar;C:\IBM\my\Myjar\self\Json\commons-beanutils-core.jar;C:\IBM\my\Myjar\self\Json\xom-1.1.jar;C:\IBM\my\Myjar\self\Apache\httpcomponents-client\httpcomponents-client-4.2.3\lib\httpclient-4.2.3.jar;C:\IBM\my\Myjar\self\Apache\httpcomponents-client\httpcomponents-client-4.2.3\lib\httpcore-4.2.2.jar
+sun.boot.class.path=C:\MyInstall\Java\Oracle_JDK\jdk1.6.0_27_debug\jdk1.6.0_27\fastdebug\jre\lib\resources.jar;C:\MyInstall\Java\Oracle_JDK\jdk1.6.0_27_debug\jdk1.6.0_27\fastdebug\jre\lib\rt.jar;C:\MyInstall\Java\Oracle_JDK\jdk1.6.0_27_debug\jdk1.6.0_27\fastdebug\jre\lib\sunrsasign.jar;C:\MyInstall\Java\Oracle_JDK\jdk1.6.0_27_debug\jdk1.6.0_27\fastdebug\jre\lib\jsse.jar;C:\MyInstall\Java\Oracle_JDK\jdk1.6.0_27_debug\jdk1.6.0_27\fastdebug\jre\lib\jce.jar;C:\MyInstall\Java\Oracle_JDK\jdk1.6.0_27_debug\jdk1.6.0_27\fastdebug\jre\lib\charsets.jar;C:\MyInstall\Java\Oracle_JDK\jdk1.6.0_27_debug\jdk1.6.0_27\fastdebug\jre\lib\modules\jdk.boot.jar;C:\MyInstall\Java\Oracle_JDK\jdk1.6.0_27_debug\jdk1.6.0_27\fastdebug\jre\classes
+java.vm.specification.vendor=Sun Microsystems Inc.
+java.vm.specification.version=1.0
+java.vm.vendor=Sun Microsystems Inc.
+file.encoding=UTF-8
+sun.java.command=api.lang.String.AboutString
+sun.java.launcher=SUN_STANDARD
+</properties>
+</vm_arguments>
+<tty>
+<tty_done stamp='5.091'/>
+</tty>
+<hotspot_log_done stamp='5.091'/>
+</hotspot_log>
