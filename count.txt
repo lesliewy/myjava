@@ -1,3 +1,0 @@
-#leslie1
-#Sat Jan 29 02:24:28 CST 2011
-count=13
