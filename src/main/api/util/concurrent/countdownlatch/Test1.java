@@ -37,6 +37,7 @@ public class Test1 {
 		Worker worker2 = new Worker("li si", 8000, latch);
 		worker1.start();//
 		worker2.start();//
+		System.out.println("all work begin");
 		latch.await();// 等待所有工人完成工作
 		System.out.println("all work done at " + sdf.format(new Date()));
 	}
