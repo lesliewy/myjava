@@ -17,4 +17,12 @@ public class Test1 {
 			e.printStackTrace();
 		}
 	}
+	
+	@Test
+	public void test2(){
+		String url = "http://www.okooo.com/soccer/match/954339/ah/change/14/";
+		if(url.matches(".*/soccer/match/[0-9]{6}/.*")){				
+			System.out.println("true: " +  url.replaceAll("change/[0-9]*/", ""));
+		}
+	}
 }
