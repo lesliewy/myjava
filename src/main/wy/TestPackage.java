@@ -20,6 +20,8 @@ package wy;
  */
 //import Test;
 
+import wy.test1.Test1;
+
 public class TestPackage
 {
 	public static void main(String [] args)

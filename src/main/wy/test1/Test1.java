@@ -1,4 +1,4 @@
-package wy;
+package wy.test1;
 
 class Test1{
 	public static void main(String [] args){
@@ -12,6 +12,6 @@ class Test1{
 		System.out.println(Integer.toBinaryString(536870911));
 	}
 	protected void print1(){
-		System.out.println("this is wy.Test1().print()");
+		System.out.println("this is wy.test1.Test1().print()");
 	}
 }
