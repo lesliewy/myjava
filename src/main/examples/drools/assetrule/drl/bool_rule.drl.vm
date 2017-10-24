@@ -1,0 +1,17 @@
+package rules.bool
+
+import examples.drools.assetrule.rule.BoolRule
+import examples.drools.assetrule.function.BoolFunctionImpl
+import examples.drools.assetrule.data.DroolsExecuteContext
+
+rule "Bool Rule: common"
+    salience 90
+    when
+        ruleCondition:BoolRule()
+        context:DroolsExecuteContext()
+        boolFunction: BoolFunctionImpl()
+        eval($!{boolRuleContext.condition})
+    then
+        boolFunction.execute(ruleCondition, context);
+    end
+

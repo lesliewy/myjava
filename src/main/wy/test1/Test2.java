@@ -1,6 +1,12 @@
 package wy.test1;
 
+import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by leslie on 2017/8/11.
@@ -42,6 +48,19 @@ public class Test2 {
         int j = 0;
         System.out.println(i++);
         System.out.println(++j);
+    }
+
+    @Test
+    public void test3(){
+        List<Set<Integer>> a = new ArrayList<>();
+        Set<Integer> b = new HashSet<>();
+        b.add(1);
+        b.add(2);
+        b.add(3);
+        a.add(b);
+        for(Set<Integer> c : a){
+            System.out.println(StringUtils.join(c.iterator(), ","));
+        }
     }
 
 }

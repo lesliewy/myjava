@@ -1,0 +1,26 @@
+package rules.common
+
+import examples.drools.assetrule.rule.BoolRule
+import examples.drools.assetrule.rule.ValueRangeRule
+import examples.drools.assetrule.rule.ValueRule
+import examples.drools.assetrule.function.BoolFunctionImpl
+import examples.drools.assetrule.function.ValueRangeFunctionImpl
+import examples.drools.assetrule.function.ValueFunctionImpl
+import examples.drools.assetrule.data.DroolsExecuteContext
+
+#if(${ruleContext.drlContexts})
+    #foreach($drlContext in ${ruleContext.drlContexts})
+        rule "$!{drlContext.alias}"
+            salience $!{drlContext.salience}
+            when
+                $!{drlContext.ruleCondition}
+                context:DroolsExecuteContext()
+                $!{drlContext.varDefine}
+
+                eval($!{drlContext.condition})
+            then
+                $!{drlContext.executeString};
+            end
+    #end
+#end
+

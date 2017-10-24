@@ -14,20 +14,51 @@
         <java-version>1.8</java-version>
         <java-encoding>UTF-8</java-encoding>
         <junit-version>4.11</junit-version>
+        <mockito-version>1.9.5</mockito-version>
+        <powermock-version>1.5.6</powermock-version>
         <dom4j-version>1.6.1</dom4j-version>
         <slf4j-version>1.7.25</slf4j-version>
         <httpclient-version>4.5.1</httpclient-version>
         <jdom-version>1.1</jdom-version>
         <spring-version>4.1.6.RELEASE</spring-version>
         <dubbo-version>2.8.4</dubbo-version>
+        <fastjson-version>1.2.6</fastjson-version>
+        <drools-version>6.3.0.Final</drools-version>
+        <velocity-version>1.7</velocity-version>
     </properties>
     <dependencies>
+        <!-- 测试: begin -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit-version}</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>${mockito-version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>${powermock-version}</version>
+            <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+            <version>${powermock-version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- 测试 end -->
         <dependency>
             <groupId>dom4j</groupId>
             <artifactId>dom4j</artifactId>
@@ -154,6 +185,38 @@
             </exclusions>
         </dependency>
         <!-- dubbo 框架 End -->
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>23.0</version>
+        </dependency>
+
+        <!-- drools 规则引擎: begin -->
+        <dependency>
+            <groupId>org.kie</groupId>
+            <artifactId>kie-api</artifactId>
+            <version>${drools-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jbpm</groupId>
+            <artifactId>jbpm-bpmn2</artifactId>
+            <version>${drools-version}</version>
+        </dependency>
+        <!-- drools 规则引擎: end -->
+        <!-- 模板引擎: begin -->
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version>${velocity-version}</version>
+        </dependency>
+        <!-- 模板引擎: end -->
+
     </dependencies>
     <build>
         <plugins>
