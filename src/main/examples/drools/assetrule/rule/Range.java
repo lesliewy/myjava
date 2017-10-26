@@ -5,26 +5,42 @@ import java.math.BigDecimal;
 /**
  * Created by leslie on 2017/10/20.
  */
-public class Range {
+public class Range<T> {
 
-    private BigDecimal min;
+    private T min;
     private boolean containsMin;
-    private BigDecimal max;
+    private T max;
     private boolean containsMax;
 
-    public BigDecimal getMin() {
+    public T getMin() {
         return min;
     }
 
-    public void setMin(BigDecimal min) {
+    public void setMin(T min) {
         this.min = min;
     }
 
-    public BigDecimal getMax() {
+    public boolean isContainsMin() {
+        return containsMin;
+    }
+
+    public void setContainsMin(boolean containsMin) {
+        this.containsMin = containsMin;
+    }
+
+    public T getMax() {
         return max;
     }
 
-    public void setMax(BigDecimal max) {
+    public void setMax(T max) {
         this.max = max;
+    }
+
+    public boolean isContainsMax() {
+        return containsMax;
+    }
+
+    public void setContainsMax(boolean containsMax) {
+        this.containsMax = containsMax;
     }
 }

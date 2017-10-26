@@ -4,9 +4,9 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.context.Context;
@@ -21,13 +21,11 @@ import org.kie.internal.builder.KnowledgeBuilderFactory;
 import org.kie.internal.definition.KnowledgePackage;
 import org.kie.internal.io.ResourceFactory;
 
-import examples.drools.assetrule.data.CallStrategyDroolsInput;
-import examples.drools.assetrule.data.CallStrategyDroolsOutput;
 import examples.drools.assetrule.data.DroolsExecuteContext;
-import examples.drools.assetrule.function.BoolFunctionImpl;
-import examples.drools.assetrule.function.EnumFunctionImpl;
-import examples.drools.assetrule.function.ValueFunctionImpl;
-import examples.drools.assetrule.function.ValueRangeFunctionImpl;
+import examples.drools.assetrule.data.RulesInnerOutput;
+import examples.drools.assetrule.data.RulesInput;
+import examples.drools.assetrule.data.RulesOutput;
+import examples.drools.assetrule.function.*;
 import examples.drools.assetrule.rule.*;
 
 /**
@@ -37,7 +35,6 @@ public class AssetRule {
 
     public static final void main(final String[] args) {
         StatelessKieSession session = null;
-
         String buildCompiledText = buildCompiledTextCommon();
         System.out.println("buildCompiledText: " + buildCompiledText);
 
@@ -73,91 +70,168 @@ public class AssetRule {
         kBase.addKnowledgePackages(pkgs);
         session = kBase.newStatelessKieSession();
 
-//         testCommon1(session);
+        // testCommon1(session);
         // testBoolRule1(session);
         // testValueRule1(session);
         // testValuesRange1(session);
         // testValuesEnum1(session);
 
         // 多线程
-
-        final StatelessKieSession finalSession = session;
-        ExecutorService executorService = Executors.newFixedThreadPool(100);
-        for (int i = 0; i < 1000; i++) {
-            SessionTask task = new SessionTask(session);
-            executorService.execute(task);
-        }
-
-
+        /*
+         * final StatelessKieSession finalSession = session; ExecutorService executorService =
+         * Executors.newFixedThreadPool(100); for (int i = 0; i < 1000; i++) { SessionTask task = new
+         * SessionTask(session); executorService.execute(task); }
+         */
     }
 
-    public static void testCommon1(StatelessKieSession session) {
+    private StatelessKieSession buildSession() {
+        String buildCompiledText = buildCompiledTextCommon();
+        System.out.println("buildCompiledText: " + buildCompiledText);
+
+        KnowledgeBuilderConfiguration config = KnowledgeBuilderFactory.newKnowledgeBuilderConfiguration();
+        config.setProperty("drools.dialect.default", "mvel");
+        config.setProperty("drools.dialect.mvel.strict", "false");
+        config.setProperty("drools.permgenThreshold", "0");
+        KnowledgeBuilder kBuilder = KnowledgeBuilderFactory.newKnowledgeBuilder(config);
+        kBuilder.add(ResourceFactory.newReaderResource(new StringReader(buildCompiledText)), ResourceType.DRL);
+        if (kBuilder.hasErrors()) {
+            for (KnowledgeBuilderError error : kBuilder.getErrors()) {
+                System.out.println("Unable to compile rule, error: " + error.getMessage() + ", drl:"
+                                   + buildCompiledText);
+            }
+            return null;
+        }
+        Collection<KnowledgePackage> pkgs = kBuilder.getKnowledgePackages();
+        KnowledgeBase kBase = KnowledgeBaseFactory.newKnowledgeBase();
+        kBase.addKnowledgePackages(pkgs);
+        return kBase.newStatelessKieSession();
+    }
+
+    public RulesOutput execute(RulesInput input) {
+        StatelessKieSession session = buildSession();
+        return testCommon1(session);
+    }
+
+    public RulesOutput testCommon1(StatelessKieSession session) {
         long begin = System.currentTimeMillis();
         List<Object> objects = new ArrayList<>();
         DroolsExecuteContext context = new DroolsExecuteContext();
-        CallStrategyDroolsOutput output = new CallStrategyDroolsOutput();
-        output.setResult("this is output.");
-        context.setCallStrategyDroolsOutput(output);
-        CallStrategyDroolsInput input = new CallStrategyDroolsInput();
-        input.setChinese(true);
-        input.setAge(50);
-        context.setCallStrategyDroolsInput(input);
+        RulesInnerOutput innerOutput = new RulesInnerOutput();
+        ConcurrentHashMap<Integer, RuleDetail> hitRules = new ConcurrentHashMap<>();
+        innerOutput.setHitRules(hitRules);
+        context.setRulesInnerOutput(innerOutput);
+        RulesInput input = new RulesInput();
+        context.setRulesInput(input);
         objects.add(context);
         // 加入bool规则
+        // BoolRule boolRule = new BoolRule();
+        // Map<Integer, Map<String, Boolean>> boolValues = new HashMap<>();
+        // Map<String, Boolean> boolValueMap = new HashMap<>();
+        // boolValueMap.put("isChinese", true);
+        // boolValueMap.put("isMale", false);
+        // boolValues.put(0, boolValueMap);
+
         BoolRule boolRule = new BoolRule();
-        boolRule.setIsMessage(true);
-        boolRule.setIsRecording(false);
-        boolRule.setIsRepair(false);
-        boolRule.setChinese(true);
-        Map<Integer, Map<String, Boolean>> boolValues = new HashMap<>();
-        Map<String, Boolean> boolValueMap = new HashMap<>();
-        boolValueMap.put("isChinese", true);
-        boolValueMap.put("isMale", false);
-        boolValues.put(0, boolValueMap);
-        boolRule.setRuleUuid("10");
+        Map<Integer, BoolRuleDetail> boolRuleMap = new HashMap<>();
+        BoolRuleDetail boolRuleDetail = new BoolRuleDetail();
+        boolRuleDetail.setRuleSetName("basic_rules");
+        boolRuleDetail.setRuleName("isMale");
+        boolRuleDetail.setValue(true);
+        boolRuleMap.put(0, boolRuleDetail);
+        boolRule.setValues(boolRuleMap);
         objects.add(boolRule);
 
         // 加入 valueRange规则.
+        // ValueRangeRule valueRangeRule = new ValueRangeRule();
+        // Map<Integer, Map<String, Range>> valueRangeMap = new HashMap<>();
+        // Map<String, Range> valueRange = new HashMap<>();
+        // Range<BigDecimal> ageRange = new Range();
+        // ageRange.setMin(new BigDecimal("3"));
+        // ageRange.setMax(new BigDecimal("20"));
+        // ageRange.setContainsMin(false);
+        // ageRange.setContainsMax(true);
+        // valueRange.put("age", ageRange);
+        //
+        // Range<BigDecimal> heightRange = new Range();
+        // heightRange.setMin(new BigDecimal("1.23"));
+        // heightRange.setMax(new BigDecimal("1.92"));
+        // heightRange.setContainsMin(false);
+        // heightRange.setContainsMax(true);
+        // valueRange.put("height", heightRange);
+
         ValueRangeRule valueRangeRule = new ValueRangeRule();
-        Map<Integer, Map<String, Range>> valueRangeMap = new HashMap<>();
-        Map<String, Range> valueRange = new HashMap<>();
-        Range ageRange = new Range();
-        ageRange.setMin(new BigDecimal("3"));
-        ageRange.setMax(new BigDecimal("20"));
-        valueRange.put("age", ageRange);
-
-        Range heightRange = new Range();
-        heightRange.setMin(new BigDecimal("1.23"));
-        heightRange.setMax(new BigDecimal("1.92"));
-        valueRange.put("height", heightRange);
-
-        valueRangeMap.put(1, valueRange);
-        valueRangeRule.setValueRange(valueRangeMap);
+        Map<Integer, ValueRangeRuleDetail> valueRangeRuleMap = new HashMap<>();
+        ValueRangeRuleDetail valueRangeRuleDetail = new ValueRangeRuleDetail();
+        valueRangeRuleDetail.setRuleSetName("basic_rules");
+        valueRangeRuleDetail.setRuleName("age");
+        Range<BigDecimal> range = new Range<>();
+        range.setMax(new BigDecimal("9832"));
+        range.setMin(new BigDecimal("23"));
+        range.setContainsMin(true);
+        range.setContainsMax(true);
+        valueRangeRuleDetail.setRange(range);
+        valueRangeRuleMap.put(1, valueRangeRuleDetail);
+        valueRangeRule.setValues(valueRangeRuleMap);
         objects.add(valueRangeRule);
 
         // 加入value规则.
+        // ValueRule valueRule = new ValueRule();
+        // Map<Integer, Map<String, String>> valuesSeq = new HashMap<>();
+        // Map<String, String> valueMap = new HashMap<>();
+        // valueMap.put("name", "wy");
+        // valueMap.put("age", "20");
+        // valuesSeq.put(3, valueMap);
+        // valueRule.setValues(valuesSeq);
+        // objects.add(valueRule);
+
         ValueRule valueRule = new ValueRule();
-        Map<Integer, Map<String, String>> valuesSeq = new HashMap<>();
-        Map<String, String> valueMap = new HashMap<>();
-        valueMap.put("name", "wy");
-        valueMap.put("age", "20");
-        valuesSeq.put(3, valueMap);
-        valueRule.setValues(valuesSeq);
+        Map<Integer, ValueRuleDetail> valueRuleMap = new HashMap<>();
+        ValueRuleDetail valueRuleDetail = new ValueRuleDetail();
+        valueRuleDetail.setRuleSetName("risk_rules");
+        valueRuleDetail.setRuleName("aaa");
+        valueRuleDetail.setValue("bb");
+        valueRuleMap.put(2, valueRuleDetail);
+        valueRule.setValues(valueRuleMap);
         objects.add(valueRule);
 
         // 加入enum规则
+        // EnumRule enumRule = new EnumRule();
+        // Map<Integer, Map<String, List<String>>> enumSeqMap = new HashMap<>();
+        // Map<String, List<String>> enumValues = new HashMap<>();
+        // List<String> visitPlace = new ArrayList<>();
+        // visitPlace.add("LYG");
+        // visitPlace.add("CS");
+        // visitPlace.add("NJ");
+        // visitPlace.add("HZ");
+        // enumValues.put("visitPlace", visitPlace);
+        // enumSeqMap.put(15, enumValues);
+        // enumRule.setValues(enumSeqMap);
+        // objects.add(enumRule);
+
         EnumRule enumRule = new EnumRule();
-        Map<Integer, Map<String, List<String>>> enumSeqMap = new HashMap<>();
-        Map<String, List<String>> enumValues = new HashMap<>();
-        List<String> visitPlace = new ArrayList<>();
-        visitPlace.add("LYG");
-        visitPlace.add("CS");
-        visitPlace.add("NJ");
-        visitPlace.add("HZ");
-        enumValues.put("visitPlace", visitPlace);
-        enumSeqMap.put(15, enumValues);
-        enumRule.setValues(enumSeqMap);
+        Map<Integer, EnumRuleDetail> enumRuleDetailMap = new HashMap<>();
+        EnumRuleDetail enumRuleDetail = new EnumRuleDetail();
+        enumRuleDetail.setRuleSetName("filter_rules");
+        enumRuleDetail.setRuleName("sji");
+        Set<String> enumValue = new HashSet<>();
+        enumValue.add("a");
+        enumValue.add("b");
+        enumValue.add("c");
+        enumRuleDetail.setValue(enumValue);
+        enumRuleDetailMap.put(3, enumRuleDetail);
+        enumRule.setValues(enumRuleDetailMap);
         objects.add(enumRule);
+
+        // Dynamic rule
+        DynamicRule dynamicRule = new DynamicRule();
+        Map<Integer, DynamicRuleDetail> dynamicRuleDetailMap = new HashMap<>();
+        DynamicRuleDetail dynamicRuleDetail = new DynamicRuleDetail();
+        dynamicRuleDetail.setRuleSetName("filter_rules");
+        dynamicRuleDetail.setRuleName("d2");
+        dynamicRuleDetail.setValue(45);
+        dynamicRuleDetailMap.put(4, dynamicRuleDetail);
+        dynamicRule.setValues(dynamicRuleDetailMap);
+        objects.add(dynamicRule);
 
         // 加入计算实例
         List list = new ArrayList();
@@ -165,6 +239,7 @@ public class AssetRule {
         list.add(new ValueRangeFunctionImpl());
         list.add(new ValueFunctionImpl());
         list.add(new EnumFunctionImpl());
+        list.add(new DynamicFunctionImpl());
         objects.addAll(list);
 
         // 执行
@@ -173,131 +248,65 @@ public class AssetRule {
         long end = System.currentTimeMillis();
         System.out.println("elapse session.execute(): " + (end - begin2) + " ms");
         System.out.println("elapse all: " + (end - begin) + " ms.");
-        System.out.println("output: " + output.getResult());
+        hitRules = innerOutput.getHitRules();
+        System.out.println("inner output: " + hitRules);
+        RulesOutput output = new RulesOutput();
+        output.setAccepted(true);
+        // output.setHitRuleSeq(-1);
+        if (!hitRules.isEmpty()) {
+            output.setAccepted(false);
+            String ruleSetName = "";
+            String[] ruleSetTypes = new String[] { "basic_rules", "risk_rules", "filter_rules" };
+            int length = ruleSetTypes.length;
+            for (int i = 0; i < length; i++) {
+                RuleDetail detail = hitRules.get(ruleSetTypes[i]);
+                // 再判断
+                // if (StringUtils.isNotBlank(ruleName)) {
+                // output.setRuleSetName(ruleSetTypes[i]);
+                // output.setRuleName(ruleName);
+                // break;
+                // }
+            }
+        }
+        return output;
     }
-
-    private static void testBoolRule1(StatelessKieSession session) {
-        List<Object> objects = new ArrayList<>();
-        DroolsExecuteContext context = new DroolsExecuteContext();
-        context.setCallStrategyDroolsOutput(new CallStrategyDroolsOutput());
-        CallStrategyDroolsInput input = new CallStrategyDroolsInput();
-        input.setChinese(true);
-        input.setAge(50);
-        context.setCallStrategyDroolsInput(input);
-        objects.add(context);
-        // 加入规则对象
-        BoolRule boolRule = new BoolRule();
-        Map<String, Boolean> values = new HashMap<>();
-        Map<Integer, Map<String, Boolean>> boolSeqMap = new HashMap<>();
-        values.put("isChinese", true);
-        values.put("isMale", false);
-        boolSeqMap.put(23, values);
-        boolRule.setValues(boolSeqMap);
-        objects.add(boolRule);
-        // 加入计算实例
-        List list = new ArrayList();
-        list.add(new BoolFunctionImpl());
-        objects.addAll(list);
-        // 执行
-        session.execute(objects);
-        CallStrategyDroolsOutput output = context.getCallStrategyDroolsOutput();
-        System.out.println("output: " + output.getResult());
-    }
-
-    private static void testValueRule1(StatelessKieSession session) {
-        List<Object> objects = new ArrayList<>();
-        DroolsExecuteContext context = new DroolsExecuteContext();
-        context.setCallStrategyDroolsOutput(new CallStrategyDroolsOutput());
-        CallStrategyDroolsInput input = new CallStrategyDroolsInput();
-        input.setChinese(true);
-        input.setAge(50);
-        context.setCallStrategyDroolsInput(input);
-        objects.add(context);
-        // 加入规则对象
-        ValueRule vallueRule = new ValueRule();
-        Map<Integer, Map<String, String>> valueSeqMap = new HashMap<>();
-        Map<String, String> values = new HashMap<>();
-        values.put("name", "wy");
-        values.put("age", "10");
-        valueSeqMap.put(232, values);
-        vallueRule.setValues(valueSeqMap);
-        objects.add(vallueRule);
-        // 加入计算实例
-        List list = new ArrayList();
-        list.add(new ValueFunctionImpl());
-        objects.addAll(list);
-        // 执行
-        session.execute(objects);
-        CallStrategyDroolsOutput output = context.getCallStrategyDroolsOutput();
-        System.out.println("output: " + output.getResult());
-    }
-
-    private static void testValuesRange1(StatelessKieSession session) {
-        List<Object> objects = new ArrayList<>();
-        DroolsExecuteContext context = new DroolsExecuteContext();
-        context.setCallStrategyDroolsOutput(new CallStrategyDroolsOutput());
-        CallStrategyDroolsInput input = new CallStrategyDroolsInput();
-        input.setChinese(true);
-        input.setAge(50);
-        context.setCallStrategyDroolsInput(input);
-        objects.add(context);
-        // 加入规则对象
-        ValueRangeRule valueRangeRule = new ValueRangeRule();
-        valueRangeRule.setFieldName("age");
-        Map<Integer, Map<String, Range>> valueRangeSeqMap = new HashMap<>();
-        Map<String, Range> valueRange = new HashMap<>();
-        Range ageRange = new Range();
-        ageRange.setMin(new BigDecimal("3"));
-        ageRange.setMax(new BigDecimal("20"));
-        valueRange.put("age", ageRange);
-
-        Range heightRange = new Range();
-        heightRange.setMin(new BigDecimal("1.23"));
-        heightRange.setMax(new BigDecimal("1.92"));
-        valueRange.put("height", heightRange);
-        valueRangeSeqMap.put(232, valueRange);
-
-        valueRangeRule.setValueRange(valueRangeSeqMap);
-        objects.add(valueRangeRule);
-        // 加入计算实例
-        List list = new ArrayList();
-        list.add(new ValueRangeFunctionImpl());
-        objects.addAll(list);
-        // 执行
-        session.execute(objects);
-        CallStrategyDroolsOutput output = context.getCallStrategyDroolsOutput();
-        System.out.println("output: " + output.getResult());
-    }
-
-    private static void testValuesEnum1(StatelessKieSession session) {
-        List<Object> objects = new ArrayList<>();
-        DroolsExecuteContext context = new DroolsExecuteContext();
-        context.setCallStrategyDroolsOutput(new CallStrategyDroolsOutput());
-        CallStrategyDroolsInput input = new CallStrategyDroolsInput();
-        input.setChinese(true);
-        input.setAge(50);
-        context.setCallStrategyDroolsInput(input);
-        objects.add(context);
-        // 加入规则对象
-        EnumRule enumRule = new EnumRule();
-        Map<Integer, Map<String, List<String>>> enumSeqMap = new HashMap<>();
-        Map<String, List<String>> values = new HashMap<>();
-        List<String> types = new ArrayList();
-        types.add("a");
-        types.add("b");
-        values.put("a", types);
-        enumSeqMap.put(998, values);
-        enumRule.setValues(enumSeqMap);
-        objects.add(enumRule);
-        // 加入计算实例
-        List list = new ArrayList();
-        list.add(new EnumFunctionImpl());
-        objects.addAll(list);
-        // 执行
-        session.execute(objects);
-        CallStrategyDroolsOutput output = context.getCallStrategyDroolsOutput();
-        System.out.println("output: " + output.getResult());
-    }
+    /*
+     * private static void testBoolRule1(StatelessKieSession session) { List<Object> objects = new ArrayList<>();
+     * DroolsExecuteContext context = new DroolsExecuteContext(); context.setRulesInnerOutput(new RulesInnerOutput());
+     * RulesInput input = new RulesInput(); context.setRulesInput(input); objects.add(context); // 加入规则对象 BoolRule
+     * boolRule = new BoolRule(); Map<String, Boolean> values = new HashMap<>(); Map<Integer, Map<String, Boolean>>
+     * boolSeqMap = new HashMap<>(); values.put("isChinese", true); values.put("isMale", false); boolSeqMap.put(23,
+     * values); boolRule.setValues(boolSeqMap); objects.add(boolRule); // 加入计算实例 List list = new ArrayList();
+     * list.add(new BoolFunctionImpl()); objects.addAll(list); // 执行 session.execute(objects); RulesOutput output =
+     * context.getRulesOutput(); System.out.println("output: " + output.getHitRuleSeq()); } private static void
+     * testValueRule1(StatelessKieSession session) { List<Object> objects = new ArrayList<>(); DroolsExecuteContext
+     * context = new DroolsExecuteContext(); context.setRulesOutput(new RulesOutput()); RulesInput input = new
+     * RulesInput(); context.setRulesInput(input); objects.add(context); // 加入规则对象 ValueRule vallueRule = new
+     * ValueRule(); Map<Integer, Map<String, String>> valueSeqMap = new HashMap<>(); Map<String, String> values = new
+     * HashMap<>(); values.put("name", "wy"); values.put("age", "10"); valueSeqMap.put(232, values);
+     * vallueRule.setValues(valueSeqMap); objects.add(vallueRule); // 加入计算实例 List list = new ArrayList(); list.add(new
+     * ValueFunctionImpl()); objects.addAll(list); // 执行 session.execute(objects); RulesOutput output =
+     * context.getRulesInnerOutput(); System.out.println("output: " + output.getHitRuleSeq()); } private static void
+     * testValuesRange1(StatelessKieSession session) { List<Object> objects = new ArrayList<>(); DroolsExecuteContext
+     * context = new DroolsExecuteContext(); context.setRulesInnerOutput(new RulesInnerOutput()); RulesInput input = new
+     * RulesInput(); context.setRulesInput(input); objects.add(context); // 加入规则对象 ValueRangeRule valueRangeRule = new
+     * ValueRangeRule(); Map<Integer, Map<String, Range>> valueRangeSeqMap = new HashMap<>(); Map<String, Range>
+     * valueRange = new HashMap<>(); Range ageRange = new Range(); ageRange.setMin(new BigDecimal("3"));
+     * ageRange.setMax(new BigDecimal("20")); valueRange.put("age", ageRange); Range heightRange = new Range();
+     * heightRange.setMin(new BigDecimal("1.23")); heightRange.setMax(new BigDecimal("1.92")); valueRange.put("height",
+     * heightRange); valueRangeSeqMap.put(232, valueRange); objects.add(valueRangeRule); // 加入计算实例 List list = new
+     * ArrayList(); list.add(new ValueRangeFunctionImpl()); objects.addAll(list); // 执行 session.execute(objects);
+     * RulesOutput output = context.getRulesInnerOutput(); System.out.println("output: " + output.getHitRuleSeq()); }
+     * private static void testValuesEnum1(StatelessKieSession session) { List<Object> objects = new ArrayList<>();
+     * DroolsExecuteContext context = new DroolsExecuteContext(); context.setRulesInnerOutput(new RulesInnerOutput());
+     * RulesInput input = new RulesInput(); context.setRulesInput(input); objects.add(context); // 加入规则对象 EnumRule
+     * enumRule = new EnumRule(); Map<Integer, Map<String, List<String>>> enumSeqMap = new HashMap<>(); Map<String,
+     * List<String>> values = new HashMap<>(); List<String> types = new ArrayList(); types.add("a"); types.add("b");
+     * values.put("a", types); enumSeqMap.put(998, values); enumRule.setValues(enumSeqMap); objects.add(enumRule); //
+     * 加入计算实例 List list = new ArrayList(); list.add(new EnumFunctionImpl()); objects.addAll(list); // 执行
+     * session.execute(objects); RulesOutput output = context.getRulesInnerOutput(); System.out.println("output: " +
+     * output.getHitRuleSeq()); }
+     */
 
     private static String buildCompiledTextCommon() {
         String compiledText = null;
@@ -332,6 +341,16 @@ public class AssetRule {
         valueRuleDrl.setSalience("70");
         drlContexts.add(valueRuleDrl);
 
+        DrlContext dynamicRuleDrl = new DrlContext("dynamic", "execute");
+        dynamicRuleDrl.setRuleCondition("ruleCondition:DynamicRule()");
+        dynamicRuleDrl.setVarDefine("dynamicRule:DynamicFunctionImpl()");
+        dynamicRuleDrl.setExecuteString("dynamicRule.execute(ruleCondition, context)");
+        dynamicRuleDrl.setCondition("true");
+        dynamicRuleDrl.setDesc("动态规则");
+        dynamicRuleDrl.setAlias("dynamic/execute");
+        dynamicRuleDrl.setSalience("70");
+        drlContexts.add(dynamicRuleDrl);
+
         RuleContext ruleContext = new RuleContext();
         ruleContext.setDrlContexts(drlContexts);
         String drlTemplate = loadDrlTemplate("COMMON");
@@ -345,74 +364,32 @@ public class AssetRule {
         }
         return compiledText;
     }
-
-    private static String buildCompiledTextBool() {
-        String compiledText = null;
-        DrlContext boolRuleContext = new DrlContext("bool", "execute");
-        boolRuleContext.setCondition("true");
-
-        String drlTemplate = loadDrlTemplate("BOOL");
-        try (StringWriter writer = new StringWriter()) {
-            Context ctx = new VelocityContext();
-            ctx.put("boolRuleContext", boolRuleContext);
-            Velocity.evaluate(ctx, writer, "velocity", drlTemplate);
-            compiledText = writer.toString();
-        } catch (Exception e) {
-            System.out.println("[RenderEngine] assemble occur exception, details: " + e);
-        }
-        return compiledText;
-    }
-
-    private static String buildCompiledTextValue() {
-        String compiledText = null;
-        DrlContext valueRuleContext = new DrlContext("value", "execute");
-        valueRuleContext.setCondition("true");
-
-        String drlTemplate = loadDrlTemplate("VALUE");
-        try (StringWriter writer = new StringWriter()) {
-            Context ctx = new VelocityContext();
-            ctx.put("valueRuleContext", valueRuleContext);
-            Velocity.evaluate(ctx, writer, "velocity", drlTemplate);
-            compiledText = writer.toString();
-        } catch (Exception e) {
-            System.out.println("[RenderEngine] assemble occur exception, details: " + e);
-        }
-        return compiledText;
-    }
-
-    private static String buildCompiledTextRange() {
-        String compiledText = null;
-        DrlContext rangeRuleContext = new DrlContext("range", "execute");
-        rangeRuleContext.setCondition("true");
-
-        String drlTemplate = loadDrlTemplate("RANGE");
-        try (StringWriter writer = new StringWriter()) {
-            Context ctx = new VelocityContext();
-            ctx.put("rangeRuleContext", rangeRuleContext);
-            Velocity.evaluate(ctx, writer, "velocity", drlTemplate);
-            compiledText = writer.toString();
-        } catch (Exception e) {
-            System.out.println("[RenderEngine] assemble occur exception, details: " + e);
-        }
-        return compiledText;
-    }
-
-    private static String buildCompiledTextEnum() {
-        String compiledText = null;
-        DrlContext enumRuleContext = new DrlContext("enum", "execute");
-        enumRuleContext.setCondition("true");
-
-        String drlTemplate = loadDrlTemplate("ENUM");
-        try (StringWriter writer = new StringWriter()) {
-            Context ctx = new VelocityContext();
-            ctx.put("enumRuleContext", enumRuleContext);
-            Velocity.evaluate(ctx, writer, "velocity", drlTemplate);
-            compiledText = writer.toString();
-        } catch (Exception e) {
-            System.out.println("[RenderEngine] assemble occur exception, details: " + e);
-        }
-        return compiledText;
-    }
+    /*
+     * private static String buildCompiledTextBool() { String compiledText = null; DrlContext boolRuleContext = new
+     * DrlContext("bool", "execute"); boolRuleContext.setCondition("true"); String drlTemplate =
+     * loadDrlTemplate("BOOL"); try (StringWriter writer = new StringWriter()) { Context ctx = new VelocityContext();
+     * ctx.put("boolRuleContext", boolRuleContext); Velocity.evaluate(ctx, writer, "velocity", drlTemplate);
+     * compiledText = writer.toString(); } catch (Exception e) {
+     * System.out.println("[RenderEngine] assemble occur exception, details: " + e); } return compiledText; } private
+     * static String buildCompiledTextValue() { String compiledText = null; DrlContext valueRuleContext = new
+     * DrlContext("value", "execute"); valueRuleContext.setCondition("true"); String drlTemplate =
+     * loadDrlTemplate("VALUE"); try (StringWriter writer = new StringWriter()) { Context ctx = new VelocityContext();
+     * ctx.put("valueRuleContext", valueRuleContext); Velocity.evaluate(ctx, writer, "velocity", drlTemplate);
+     * compiledText = writer.toString(); } catch (Exception e) {
+     * System.out.println("[RenderEngine] assemble occur exception, details: " + e); } return compiledText; } private
+     * static String buildCompiledTextRange() { String compiledText = null; DrlContext rangeRuleContext = new
+     * DrlContext("range", "execute"); rangeRuleContext.setCondition("true"); String drlTemplate =
+     * loadDrlTemplate("RANGE"); try (StringWriter writer = new StringWriter()) { Context ctx = new VelocityContext();
+     * ctx.put("rangeRuleContext", rangeRuleContext); Velocity.evaluate(ctx, writer, "velocity", drlTemplate);
+     * compiledText = writer.toString(); } catch (Exception e) {
+     * System.out.println("[RenderEngine] assemble occur exception, details: " + e); } return compiledText; } private
+     * static String buildCompiledTextEnum() { String compiledText = null; DrlContext enumRuleContext = new
+     * DrlContext("enum", "execute"); enumRuleContext.setCondition("true"); String drlTemplate =
+     * loadDrlTemplate("ENUM"); try (StringWriter writer = new StringWriter()) { Context ctx = new VelocityContext();
+     * ctx.put("enumRuleContext", enumRuleContext); Velocity.evaluate(ctx, writer, "velocity", drlTemplate);
+     * compiledText = writer.toString(); } catch (Exception e) {
+     * System.out.println("[RenderEngine] assemble occur exception, details: " + e); } return compiledText; }
+     */
 
     public static String loadDrlTemplate(String ruleType) {
         String filePath = null;
@@ -464,6 +441,7 @@ public class AssetRule {
         }
         return sb.toString();
     }
+
 }
 
 class SessionTask implements Runnable {
@@ -476,6 +454,7 @@ class SessionTask implements Runnable {
 
     @Override
     public void run() {
-        AssetRule.testCommon1(session);
+        AssetRule rule = new AssetRule();
+        rule.testCommon1(session);
     }
 }

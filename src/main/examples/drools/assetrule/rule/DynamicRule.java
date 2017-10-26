@@ -1,9 +1,8 @@
 package examples.drools.assetrule.rule;
 
-import java.util.Map;
-
 /**
  * Created by leslie on 2017/10/18.
  */
-public class ValueRule extends Rule<ValueRuleDetail> {
+public class DynamicRule extends Rule<DynamicRuleDetail> {
+
 }

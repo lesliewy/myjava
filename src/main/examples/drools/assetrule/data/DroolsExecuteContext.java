@@ -5,22 +5,31 @@ package examples.drools.assetrule.data;
  */
 public class DroolsExecuteContext {
 
-    private CallStrategyDroolsInput  callStrategyDroolsInput;
-    private CallStrategyDroolsOutput callStrategyDroolsOutput;
+    private RulesInput       rulesInput;
+    private RulesOutput      rulesOutput;
+    private RulesInnerOutput rulesInnerOutput;
 
-    public CallStrategyDroolsInput getCallStrategyDroolsInput() {
-        return callStrategyDroolsInput;
+    public RulesInput getRulesInput() {
+        return rulesInput;
     }
 
-    public void setCallStrategyDroolsInput(CallStrategyDroolsInput callStrategyDroolsInput) {
-        this.callStrategyDroolsInput = callStrategyDroolsInput;
+    public void setRulesInput(RulesInput rulesInput) {
+        this.rulesInput = rulesInput;
     }
 
-    public CallStrategyDroolsOutput getCallStrategyDroolsOutput() {
-        return callStrategyDroolsOutput;
+    public RulesOutput getRulesOutput() {
+        return rulesOutput;
     }
 
-    public void setCallStrategyDroolsOutput(CallStrategyDroolsOutput callStrategyDroolsOutput) {
-        this.callStrategyDroolsOutput = callStrategyDroolsOutput;
+    public void setRulesOutput(RulesOutput rulesOutput) {
+        this.rulesOutput = rulesOutput;
+    }
+
+    public RulesInnerOutput getRulesInnerOutput() {
+        return rulesInnerOutput;
+    }
+
+    public void setRulesInnerOutput(RulesInnerOutput rulesInnerOutput) {
+        this.rulesInnerOutput = rulesInnerOutput;
     }
 }

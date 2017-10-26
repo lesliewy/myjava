@@ -3,9 +3,11 @@ package rules.common
 import examples.drools.assetrule.rule.BoolRule
 import examples.drools.assetrule.rule.ValueRangeRule
 import examples.drools.assetrule.rule.ValueRule
+import examples.drools.assetrule.rule.DynamicRule
 import examples.drools.assetrule.function.BoolFunctionImpl
 import examples.drools.assetrule.function.ValueRangeFunctionImpl
 import examples.drools.assetrule.function.ValueFunctionImpl
+import examples.drools.assetrule.function.DynamicFunctionImpl
 import examples.drools.assetrule.data.DroolsExecuteContext
 
 #if(${ruleContext.drlContexts})
@@ -16,8 +18,6 @@ import examples.drools.assetrule.data.DroolsExecuteContext
                 $!{drlContext.ruleCondition}
                 context:DroolsExecuteContext()
                 $!{drlContext.varDefine}
-
-                eval($!{drlContext.condition})
             then
                 $!{drlContext.executeString};
             end

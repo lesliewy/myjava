@@ -1,31 +1,29 @@
 package examples.drools.assetrule.function;
 
-import examples.drools.assetrule.data.DroolsExecuteContext;
-import examples.drools.assetrule.rule.Range;
-import examples.drools.assetrule.rule.ValueRangeRule;
-
 import java.util.Map;
+
+import examples.drools.assetrule.data.DroolsExecuteContext;
+import examples.drools.assetrule.data.RulesInnerOutput;
+import examples.drools.assetrule.rule.Range;
+import examples.drools.assetrule.rule.Rule;
+import examples.drools.assetrule.rule.ValueRangeRuleDetail;
 
 /**
  * Created by leslie on 2017/10/20.
  */
 public class ValueRangeFunctionImpl {
 
-    public void execute(ValueRangeRule valueRangeRule, DroolsExecuteContext context) {
+    public void execute(Rule<ValueRangeRuleDetail> valueRangeRule, DroolsExecuteContext context) {
         System.out.println("=== valueRangeRule: ");
-        if (valueRangeRule.getValueRange() != null) {
-            for (Map.Entry<Integer, Map<String, Range>> entry : valueRangeRule.getValueRange().entrySet()) {
-                Map<String, Range> rangeMap = entry.getValue();
-                for(Map.Entry<String, Range> range : rangeMap.entrySet()){
-
-                    System.out.println("seq: " + entry.getKey() + ", range: " + ((Range) range.getValue()).getMin() + " - "
-                                       + ((Range) range.getValue()).getMax());
-                }
+        if (valueRangeRule.getValues() != null) {
+            for (Map.Entry<Integer, ValueRangeRuleDetail> entry : valueRangeRule.getValues().entrySet()) {
+                ValueRangeRuleDetail valueRangeRuleDetail = entry.getValue();
+                Range range = valueRangeRuleDetail.getRange();
+                System.out.println("seq: " + entry.getKey() + ", range: " + range.getMin() + " - " + range.getMax());
             }
         }
-        String result = context.getCallStrategyDroolsOutput().getResult();
-        result += "; this is valueRangeRule result";
-        context.getCallStrategyDroolsOutput().setResult(result);
+        RulesInnerOutput innerOutput = context.getRulesInnerOutput();
+        innerOutput.getHitRules().put(1, valueRangeRule.getValues().get(1));
     }
 
 }
